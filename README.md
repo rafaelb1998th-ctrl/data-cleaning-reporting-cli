@@ -1,17 +1,10 @@
-# Data cleaning & reporting CLI
+# Data Cleaning & Reporting Automation Tool (v1)
 
-Python CLI (2025) to **clean and validate** CSV / Excel files for reporting workflows.
+A Python tool that loads CSV or Excel files, cleans column names, removes duplicates, standardises dates, flags missing values and invalid emails, saves a cleaned file, and generates a text report.
 
-## Features
+## Setup
 
-- Normalises **mixed date** columns to ISO dates where possible
-- Drops **duplicate** rows (configurable subset of columns)
-- Validates **emails** (simple pattern) and optional **numeric** columns
-- Configurable **minimum salary** (or any numeric threshold on a named column)
-- Writes **cleaned** output and a short **data-quality report** (Markdown)
-- Paths resolved from the project root for predictable runs
-
-## Install
+On many Linux systems Python is “externally managed” (PEP 668), so use a virtual environment:
 
 ```bash
 python3 -m venv .venv
@@ -19,24 +12,38 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Usage
+## Run
+
+From the project root:
 
 ```bash
-python -m clean_reporting clean \
-  --input ./samples/messy_hr.csv \
-  --output ./out/cleaned.csv \
-  --report ./out/report.md \
-  --email-col email \
-  --salary-col salary \
-  --min-salary 20000
+cd src && python main.py
 ```
 
-Excel input:
+Defaults to `data/raw/sample_data.csv` if you omit `--input`.
+
+Specify a file (paths relative to `src/` if you run from `src/`):
 
 ```bash
-python -m clean_reporting clean --input ./data.xlsx --sheet Sheet1 --output ./out/cleaned.csv --report ./out/report.md
+cd src && ../.venv/bin/python main.py --input "../data/raw/sample_data.csv"
 ```
 
-## Author
+Optional minimum salary for review (flags numeric salaries strictly below `N`):
 
-[Rafael Borges](https://github.com/rafaelb1998th-ctrl)
+```bash
+../.venv/bin/python main.py --input "../data/raw/sample_data.csv" --min-salary 26000
+```
+
+(Or use `.venv/bin/python main.py` from `src` if you did not activate the venv.)
+
+Outputs (named from the input file stem, e.g. `sample_data`):
+
+- `data/cleaned/<stem>_cleaned.csv`
+- `reports/<stem>_data_quality_report.txt`
+
+## Project structure
+
+- `data/raw/` — input files
+- `data/cleaned/` — processed output
+- `reports/` — generated reports
+- `src/` — Python modules

@@ -1,5 +1,11 @@
-__pycache__/
-*.py[cod]
 .venv/
 venv/
-out/
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Generated outputs (keep only sample inputs in git)
+data/cleaned/*
+!data/cleaned/.gitkeep
+reports/*
+!reports/.gitkeep
